@@ -257,15 +257,6 @@ def get_contour_centers_and_group(cnts, results6, results12, results18):
                 elif cv2.contourArea(c) >= 350 and cv2.contourArea(c) < 1500:
                     results18 = results18.append(
                         {'X': cX, 'Y': cY}, ignore_index=True)
-            if cv2.contourArea(c) < 75:
-                results6 = results6.append(
-                    {'X': cX, 'Y': cY}, ignore_index=True)
-            elif cv2.contourArea(c) >= 75 and cv2.contourArea(c) < 350:
-                results12 = results12.append(
-                    {'X': cX, 'Y': cY}, ignore_index=True)
-            elif cv2.contourArea(c) >= 350 and cv2.contourArea(c) < 1500:
-                results18 = results18.append(
-                    {'X': cX, 'Y': cY}, ignore_index=True)
     return results6, results12, results18
 
 
