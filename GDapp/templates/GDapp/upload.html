@@ -8,15 +8,91 @@
     <p class="lead text-muted">Requirements: Please upload 1 profile to analyze (the file name should contain no
       spaces).</p>
     <form method='post' enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <!--<input name="document" type='file'>-->
-      <button type="submit">Run</button>
+      {{ csrf_token }}
+      {% for field in form %}
+      {% if field.name == 'image' %}
+      <div class="hidden">
+        {{ form.image }}
+        <input type="file" id="hidden_image_upload" />
+      </div>
+      <div id="upload_image_button">Upload Image</div>
+      <div id="upload_image_errors"></div>
+      <div id="image_preview"></div>
+      {% else %}
+      {{ field }}
+      {% endif %}
+      {% endfor %}
     </form>
-    {% if url %}
-    <p>Uploaded file: <a href="{{ url  }}">{{ url }}</a></p>
-    <!--link doesn't work if the file has spaces in it-->
-    {% endif %}
+
+    <script type="application/javascript">
+      var csrf_token = "{{ csrf_token }}";
+
+      let uploadImageButton = document
+        .getElementById('upload_image_button');
+      let uploadImageErrors = document
+        .getElementById('upload_image_errors');
+      let imageSelect = document.getElementById('id_image');
+      let fileInput = document
+        .getElementById('hidden_image_upload');
+      let imagePreview = document.getElementById('image_preview');
+      let addThumbnail = (data) => {
+        if (data.error) {
+          uploadImageErrors.innerHTML = data.error;
+        } else {
+          // if the 'from_initial_data' flag is not flipped, we need
+          // to add it to the hidden select option.
+          if (!data.from_initial_data) {
+            imageSelect.innerHTML = `
+        <option value=${data.id}" selected>
+          ${data.image}
+        </option>`;
+          }
+          uploadImageErrors.innerHTML = '';
+          imagePreview.innerHTML = `
+      <div class="image_thumbnail"
+           style="background-image: url(${data.image})">
+        <div id="image_delete">[&times;]</div>
+      </div>`;
+          //stash this in services.js or elsewhere
+          let handleFileUpload = (e, callback) => {
+            let myImage = e.target.files[0];
+            let formData = new FormData();
+            formData.append("image", myImage);
+            let myHeaders = new Headers();
+            myHeaders.append('X-CSRFToken', window.csrf_token);
+            let myInit = {
+              method: 'POST', credentials: 'same-origin',
+              headers: myHeaders, body: formData
+            }
+            let request = new Request('/related_images/', myInit);
+
+            fetch(request)
+              .then(response => response.json())
+              .then(json => {
+                if (typeof (json['image']) == 'object') {
+                  callback({ 'error': json['image'][0] });
+                } else {
+                  callback(json);
+                }
+              });
+          };
+          if (uploadImageButton) {
+            fileInput.addEventListener('change',
+              (e) => handleFileUpload(e, addThumbnail));
+            upload_image_button.addEventListener('click',
+              () => fileInput.click());
+            let selectedImage = [...imageSelect.selectedOptions];
+            if (selectedImage.length > 0) {
+              addThumbnail({
+                id: selectedImage[0].value,
+                from_initial_data: true,
+                image: selectedImage[0].innerText
+              })
+            }
+          }
+
+    </script>
+
 
     {% endblock %}
 

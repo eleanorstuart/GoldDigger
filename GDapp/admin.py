@@ -1,5 +1,5 @@
 from django.contrib import admin
-from GDapp.models import EMImage
+from GDapp.models import GoldParticleDataImage
 # Register your models here.
 
-admin.site.register(EMImage)
+admin.site.register(GoldParticleDataImage)
