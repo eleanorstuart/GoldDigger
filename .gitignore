@@ -23,3 +23,4 @@ debug.log
 /media2/Mask/*
 *.part
 /media/chunked_uploads
+.vscode
