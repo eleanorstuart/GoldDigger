@@ -5,3 +5,4 @@ ALLOWED_HOSTS = [
     'localhost',
     ]
 
+SECRET_KEY = 'x-s+84=3++0kwfzz85#mohs8)-(-+gn4bcvwo3i7#k_40yg)v4'

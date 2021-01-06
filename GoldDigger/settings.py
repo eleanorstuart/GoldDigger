@@ -14,7 +14,7 @@ import os
 import config
 
 # DEBUG=1
-SECRET_KEY='x-s+84=3++0kwfzz85#mohs8)-(-+gn4bcvwo3i7#k_40yg)v4'
+SECRET_KEY=config.SECRET_KEY
 # DJANGO_ALLOWED_HOSTS=[]
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

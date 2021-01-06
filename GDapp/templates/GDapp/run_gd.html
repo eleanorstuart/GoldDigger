@@ -50,7 +50,7 @@
   console.log(pk)
 
   var chatSocket = new WebSocket(
-    'ws://' + window.location.host +
+    'ws://' + window.location.host + ":8001/" +
     '/ws/run_gd/' + pk + '/');
   chatSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
