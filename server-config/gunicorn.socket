@@ -1,0 +1,13 @@
+#this goes in /etc/systemd/system/
+
+#this is a service to run the gunicorn command when the server starts
+
+[Unit]
+Description=gunicorn socket
+
+[Socket]
+ListenStream=/run/gunicorn.sock
+
+[Install]
+WantedBy=sockets.target
+

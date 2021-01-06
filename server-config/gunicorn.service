@@ -1,0 +1,19 @@
+# put this in /etc/systemd/system/
+
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=django
+Group=www-data
+WorkingDirectory=/usr/src/app/
+ExecStart= gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          GoldDigger.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
